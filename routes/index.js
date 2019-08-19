@@ -18,8 +18,13 @@ router.post('/', function(req, res, next) {
     }
   };
   request(options, function(err, response, body) {
-        
-      res.render('index', {userData: body});
+    var userData = JSON.parse(body);
+    options.url = userData.repos_url;
+    request(options, function(err, response, body) {
+      userData.repos = JSON.parse(body);
+      console.log(userData.repos[0]);
+      res.render('index', {userData});
+    });
   });
 });
 
